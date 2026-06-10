@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To-Do-List</title>
+    <link rel="stylesheet" href="todolist02.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container1">
+      <h1 class="title">To-Do-List</h1>
+      <div class="inputContainer">
+        <input class="enterTask"  placeholder="Enter Task">
+        <button class="addTask">Add Task</button>
+      </div>
+      <div class="filter-container">
+        <button class="allTask active">All</button>
+        <button class="completed">Completed</button>
+        <button class="pending">Pending</button>
+      </div>
+      <p class="taskCount"></p>
+      <div class="task-list">
+        <ul class="list"></ul>
+      </div>
+    </div>
+    
+    <script>
+       const input = document.querySelector(".enterTask");
+       const addBtn = document.querySelector(".addTask");
+       const list = document.querySelector(".list");
+       const allBtn = document.querySelector(".allTask");
+       const completeBtn = document.querySelector(".completed");
+       const pendingBtn = document.querySelector(".pending");
+       const remainingTask = document.querySelector(".taskCount");
+
+       let tasks = [];
+
+       let filter = "all";
+
+       const savedTasks = localStorage.getItem("tasks");
+
+       if(savedTasks){
+        tasks = JSON.parse(savedTasks);
+       }
+
+       renderTasks();
+
+       function saveTasks(){
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+       }
+
+       function renderTasks(){
+
+        list.innerHTML = "";
+
+        const remainingTasks = tasks.filter(function(task){
+          return !task.completed;
+        });
+
+
+        let filteredTasks = tasks;
+
+        if(filter === "pending"){
+          filteredTasks = tasks.filter(function(task){
+            return !task.completed;
+          });
+        }else if(filter === "completed"){
+          filteredTasks = tasks.filter(function(task){
+            return task.completed;
+          });
+        }
+
+        if(filter === "all"){
+          remainingTask.textContent = `${filteredTasks.length} total tasks `;
+        }else if(filter === "pending"){
+          remainingTask.textContent = `${filteredTasks.length} tasks pending`;
+        }else if(filter === "completed"){
+          remainingTask.textContent = `${filteredTasks.length} tasks completed`;
+        }
+
+        if(filteredTasks.length === 0){
+          const message = document.createElement("p");
+          message.textContent = "no task available !";
+
+          list.appendChild(message);
+
+          return;
+        }
+
+        
+
+        filteredTasks.forEach(function(task, index){
+
+          const date = new Date(task.createdAt);
+          const li = document.createElement("li");
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "Delete";
+          delBtn.style.margin = "10px";
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "edit";
+          editBtn.style.margin = "10px";
+          const timeSpan = document.createElement("span");
+          timeSpan.classList.add("timestamp");
+          timeSpan.textContent = ` ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+          const span = document.createElement("span");
+          span.textContent = task.text;
+          const buttonContainer = document.createElement("div");
+          buttonContainer.classList.add("button-container");
+
+          if(task.completed){
+            span.style.textDecoration = "line-through";
+          }
+
+          li.addEventListener("click", function(){
+            task.completed = !task.completed;
+
+            saveTasks();
+
+            renderTasks();
+          });
+
+          delBtn.addEventListener("click",function(event){
+            event.stopPropagation();
+
+            const taskIndex = tasks.indexOf(task);
+
+            tasks.splice(taskIndex,1);
+
+            saveTasks();
+
+            renderTasks();
+          });
+
+          editBtn.addEventListener("click",function(event){
+            event.stopPropagation();
+            const newText = prompt("editTask:");
+
+            if(newText !== null && newText.trim() !== ""){
+             task.text = newText;
+
+
+              saveTasks();
+              
+              renderTasks();
+            }
+          });
+          buttonContainer.appendChild(delBtn);
+          buttonContainer.appendChild(editBtn);
+          li.appendChild(span);
+          li.appendChild(timeSpan);
+          li.appendChild(buttonContainer);
+          list.appendChild(li);
+          
+        });
+       }
+
+       addBtn.addEventListener("click", function(){
+        if(input.value === ""){
+          return;
+        }
+
+        const value = input.value;
+        const time = new Date();
+        tasks.push({
+          text : value,
+          completed : false,
+          createdAt : time
+        });
+        input.value = "";
+
+        saveTasks();
+
+        renderTasks();
+        
+       });
+
+       input.addEventListener("keydown", function(event){
+        if(event.key === "Enter"){
+          addBtn.click();
+        }
+       });
+
+       allBtn.addEventListener("click", function(){
+        filter = "all";
+
+        allBtn.classList.add("active");
+        completeBtn.classList.remove("active");
+        pendingBtn.classList.remove("active");
+
+
+        renderTasks();
+       });
+
+       completeBtn.addEventListener("click", function(){
+        filter = "completed";
+
+        completeBtn.classList.add("active");
+        allBtn.classList.remove("active");
+        pendingBtn.classList.remove("active");
+
+        renderTasks();
+       });
+
+       pendingBtn.addEventListener("click", function(){
+        filter = "pending";
+
+        pendingBtn.classList.add("active");
+        completeBtn.classList.remove("active");
+        allBtn.classList.remove("active");
+
+        renderTasks();
+       });
+
+       input.addEventListener("focus",function(){
+        document.body.classList.add("blur-bg");
+       });
+
+       input.addEventListener("blur",function(){
+        document.body.classList.remove("blur-bg");
+       });
+
+    </script>
+  </body>
+</html>

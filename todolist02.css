@@ -1,0 +1,159 @@
+*{
+  margin : 0 ;
+  padding : 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body{
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: white;
+}
+body::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background-image: url(three-sisters-5120x3413-21162.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  z-index: -1;
+
+  transition: 0.4s;
+}
+.blur-bg::before{
+  filter: blur(8px);
+}
+.active{
+  background-color: #41FDFE;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(59,130,246,0.5);
+}
+.container1{
+  padding: 70px;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.85);
+  width: 450px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.title{
+  font-size: 50px;
+  color: #DC143C;
+  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.inputContainer{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.enterTask{
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  background-color: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9);
+}
+.addTask{
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+.addTask:hover{
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+.timestamp{
+  display: block;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+.filter-container{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filter-container button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #334155;
+  color: white;
+
+  transition: 0.3s;
+}
+.filter-container button:hover{
+  background-color: #475569;
+  transform: translateY(-2px);
+}
+.task-list{
+  max-height: 350px;
+  overflow-y: auto;
+}
+.button-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.list{
+  list-style: none;
+}
+.list li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  background-color: black;
+  color: white;
+
+  padding: 12px;
+  margin-bottom: 10px;
+
+  border-radius: 10px;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+.list li:hover{
+  transform: translateY(-3px);
+  background-color: #475569;
+}
+.list li button{
+  border: none;
+  padding: 8px  12px;
+  border-radius: 8px;
+  background-color: #DE66AC;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.list li button:hover{
+  background-color: #C90076;
+  transform: scaleY(1.05);
+}
+.taskCount{
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #FF5C77;
+}
